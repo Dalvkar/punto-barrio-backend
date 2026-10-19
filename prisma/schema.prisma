@@ -1,0 +1,70 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum CashMovementType {
+  INCOME
+  EXPENSE
+}
+
+model Product {
+  id        Int        @id @default(autoincrement())
+  name      String
+  sku       String     @unique
+  category  String
+  price     Decimal    @db.Decimal(10, 2)
+  cost      Decimal    @db.Decimal(10, 2)
+  stock     Int        @default(0)
+  minStock  Int        @default(5)
+  active    Boolean    @default(true)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  saleItems SaleItem[]
+}
+
+model Sale {
+  id          Int       @id @default(autoincrement())
+  receiptCode String    @unique
+  customer    String?
+  total       Decimal   @db.Decimal(10, 2)
+  paymentType String
+  createdAt   DateTime  @default(now())
+  items       SaleItem[]
+}
+
+model SaleItem {
+  id        Int      @id @default(autoincrement())
+  saleId    Int
+  productId Int
+  quantity  Int
+  unitPrice Decimal  @db.Decimal(10, 2)
+  subtotal  Decimal  @db.Decimal(10, 2)
+  sale      Sale     @relation(fields: [saleId], references: [id], onDelete: Cascade)
+  product   Product  @relation(fields: [productId], references: [id])
+}
+
+model CashMovement {
+  id          Int              @id @default(autoincrement())
+  type        CashMovementType
+  category    String
+  description String
+  amount      Decimal          @db.Decimal(10, 2)
+  saleId      Int?
+  createdAt   DateTime         @default(now())
+}
+
+model CashClosing {
+  id             Int      @id @default(autoincrement())
+  openingBalance Decimal  @db.Decimal(10, 2)
+  expectedAmount Decimal  @db.Decimal(10, 2)
+  actualAmount   Decimal  @db.Decimal(10, 2)
+  difference     Decimal  @db.Decimal(10, 2)
+  notes          String?
+  createdAt      DateTime @default(now())
+}
+
