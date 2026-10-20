@@ -1,0 +1,42 @@
+{
+  "description": "Controles locales de Codex para Punto Barrio backend",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "^apply_patch$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$(git rev-parse --show-toplevel)/.codex/hooks/protect-files.cjs\"",
+            "timeout": 10,
+            "statusMessage": "Comprobando que la edición no exponga secretos ni artefactos"
+          }
+        ]
+      },
+      {
+        "matcher": "^Bash$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$(git rev-parse --show-toplevel)/.codex/hooks/guard-command.cjs\"",
+            "timeout": 180,
+            "statusMessage": "Validando el comando antes de ejecutarlo"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "^apply_patch$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$(git rev-parse --show-toplevel)/.codex/hooks/validate-change.cjs\"",
+            "timeout": 180,
+            "statusMessage": "Ejecutando pruebas después de la edición"
+          }
+        ]
+      }
+    ]
+  }
+}

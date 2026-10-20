@@ -60,11 +60,11 @@ Las 5 pruebas levantan Express en un puerto efímero y sustituyen Prisma por dob
 
 Protege la rama `main` en GitHub y exige el check `Backend CI` para impedir merges cuando falle algún control.
 
-## Hooks y subagentes Claude Code
+## Hooks y subagentes Codex
 
-`.claude/agents/` contiene los subagentes `frontend`, `backend` y `database`. `.claude/settings.json` registra hooks que protegen secretos y artefactos antes de editar, validan después de cambios relevantes y bloquean comandos destructivos, mensajes no convencionales o commits con `npm run ci` fallando.
+`.codex/agents/` contiene los subagentes nativos `frontend`, `backend` y `database` en formato TOML. `AGENTS.md` indica a Codex cuándo coordinarlos. `.codex/hooks.json` registra hooks nativos que protegen secretos y artefactos antes de `apply_patch`, validan después de cambios relevantes y bloquean comandos destructivos, mensajes no convencionales o commits con `npm run ci` fallando.
 
-Al abrir Claude Code por primera vez, revisa y acepta los hooks del repositorio. Solicita funcionalidades por alcance; una funcionalidad completa debe coordinar los tres agentes.
+Al abrir el repositorio con Codex por primera vez, revisa y habilita los hooks del proyecto. Solicita funcionalidades por alcance; una funcionalidad completa debe coordinar los tres agentes.
 
 ## Render
 
@@ -81,10 +81,10 @@ Render establece `NODE_ENV=production`. El arranque actual aplica `prisma db pus
 | Requisito | Estado | Evidencia o acción |
 | --- | --- | --- |
 | Docente colaborador | Pendiente de verificación manual | Invitar al usuario del docente en los repositorios backend y frontend |
-| Commits de los 3 | Pendiente | El historial remoto actual solo identifica a un autor; cada integrante debe subir commits propios |
+| Commits de los 3 | No aplica: trabajo individual | El grupo está compuesto por un solo estudiante y el historial remoto identifica sus commits |
 | Tres partes desplegadas | Confirmado | Frontend y backend responden `200`; el health check comprueba PostgreSQL con `SELECT 1` |
 | Workflow con pruebas | Implementado | Backend CI y Frontend CI ejecutan 11 pruebas totales, validación de commits y builds |
-| Hook y subagente | Implementado | Hooks de Claude Code y tres agentes dentro de `.claude/` |
+| Hook y subagente | Implementado | Hooks nativos y tres agentes de Codex dentro de `.codex/` |
 | Sin secretos | Confirmado localmente | `.env` ignorados y control automático de archivos versionados |
 | README completo | Implementado | Instalación, arquitectura, pruebas, CI, hooks, agentes y despliegue documentados |
 
