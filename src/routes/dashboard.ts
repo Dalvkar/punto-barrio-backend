@@ -7,11 +7,15 @@ const router = Router();
 router.get('/', asyncHandler(async (_req, res) => {
   const today = new Date(); today.setHours(0, 0, 0, 0);
   const week = new Date(today); week.setDate(week.getDate() - 6);
-  const [products, todaySales, recentSales, weeklySales] = await Promise.all([
+  const [products, todaySales, recentSales, weeklySales, todayCashMovements] = await Promise.all([
     prisma.product.findMany({ where: { active: true }, orderBy: { stock: 'asc' } }),
     prisma.sale.findMany({ where: { createdAt: { gte: today } } }),
     prisma.sale.findMany({ take: 5, orderBy: { createdAt: 'desc' }, include: { items: true } }),
     prisma.sale.findMany({ where: { createdAt: { gte: week } }, orderBy: { createdAt: 'asc' } }),
+    prisma.cashMovement.findMany({
+      where: { type: 'INCOME', createdAt: { gte: today } },
+      select: { amount: true },
+    }),
   ]);
   const daily = Array.from({ length: 7 }, (_, index) => {
     const date = new Date(week); date.setDate(week.getDate() + index);
@@ -24,6 +28,7 @@ router.get('/', asyncHandler(async (_req, res) => {
   });
   res.json({
     todayRevenue: todaySales.reduce((sum, sale) => sum + Number(sale.total), 0),
+    todayCashIncome: todayCashMovements.reduce((sum, movement) => sum + Number(movement.amount), 0),
     todaySales: todaySales.length,
     activeProducts: products.length,
     inventoryValue: products.reduce((sum, product) => sum + Number(product.cost) * product.stock, 0),

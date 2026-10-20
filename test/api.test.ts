@@ -26,6 +26,12 @@ const db = {
     update: asyncCall(),
     findMany: asyncCall(() => []),
   },
+  sale: {
+    findMany: asyncCall(() => []),
+  },
+  cashMovement: {
+    findMany: asyncCall(() => []),
+  },
 };
 
 replacePrismaClient(db as unknown as PrismaClient);
@@ -51,6 +57,8 @@ beforeEach(() => {
   db.product.findUnique.calls = [];
   db.product.update.calls = [];
   db.product.findMany.calls = [];
+  db.sale.findMany = asyncCall(() => []);
+  db.cashMovement.findMany = asyncCall(() => []);
 });
 
 const request = (path: string, init?: RequestInit) => fetch(`${baseUrl}${path}`, {
@@ -115,5 +123,27 @@ describe('API Punto Barrio', () => {
     assert.equal(response.status, 409);
     assert.deepEqual(await response.json(), { message: 'El ajuste dejaría el stock en negativo' });
     assert.equal(db.product.update.calls.length, 0);
+  });
+
+  test('GET /api/dashboard separa ventas de todos los ingresos de caja', async () => {
+    db.sale.findMany = asyncCall((args) => {
+      if (args.take === 5 || args.orderBy?.createdAt === 'asc') return [];
+      return [{ id: 1, total: '100.00', createdAt: new Date(), items: [] }];
+    });
+    db.cashMovement.findMany = asyncCall(() => [
+      { amount: '100.00' },
+      { amount: '25.00' },
+    ]);
+
+    const response = await request('/api/dashboard');
+    const body = await response.json();
+
+    assert.equal(response.status, 200);
+    assert.equal(body.todayRevenue, 100);
+    assert.equal(body.todayCashIncome, 125);
+    assert.equal(body.todaySales, 1);
+    assert.equal(db.cashMovement.findMany.calls.length, 1);
+    assert.equal(db.cashMovement.findMany.calls[0][0].where.type, 'INCOME');
+    assert.ok(db.cashMovement.findMany.calls[0][0].where.createdAt.gte instanceof Date);
   });
 });
