@@ -1,4 +1,11 @@
 import { PrismaClient } from '@prisma/client';
 
-export const prisma = new PrismaClient();
+export let prisma = new PrismaClient();
+
+export const replacePrismaClient = (client: PrismaClient) => {
+  if (process.env.NODE_ENV !== 'test') {
+    throw new Error('El cliente Prisma solo puede sustituirse durante las pruebas');
+  }
+  prisma = client;
+};
 

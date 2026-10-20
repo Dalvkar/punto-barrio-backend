@@ -5,9 +5,13 @@
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "test": "tsx --test test/api.test.ts",
+    "ci": "npm run db:generate && npm run db:verify && npm test && npm run typecheck && npm run build",
     "start": "node dist/src/server.js",
     "render:start": "prisma db push && node dist/prisma/seed.js && node dist/src/server.js",
     "db:generate": "prisma generate",
+    "db:verify": "node scripts/verify-database-safety.mjs",
     "db:push": "prisma db push",
     "db:migrate": "prisma migrate deploy",
     "db:seed": "tsx prisma/seed.ts"
