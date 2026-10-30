@@ -1,7 +1,19 @@
 # HU 09 Administrar clientes
 
-**Historia:** Como encargado de la tienda, necesitaba registrar clientes y límites para controlar las compras fiadas.
+**Como** encargado de la tienda
+**quiero** registrar clientes y su límite de crédito
+**para** controlar a quién se permite comprar fiado.
 
-**Resultado realizado:** se implementó el alta y listado de clientes activos con teléfono, límite, saldo y crédito disponible.
+## Criterios de aceptación
 
-**Evidencia:** modelo `Customer`, ruta `src/routes/customers.ts` y vista Clientes y fiados.
+- Nombre es obligatorio; teléfono es opcional.
+- El límite de crédito es no negativo y el saldo inicial es cero.
+- El listado muestra saldo y crédito disponible por cliente activo.
+- El saldo solo cambia mediante operaciones de fiado o abono.
+
+## Trazabilidad
+
+- Requisito: RF-11.
+- Backend: `src/routes/customers.ts`.
+- Datos: `Customer`.
+- Interfaz: vista Clientes y fiados.
