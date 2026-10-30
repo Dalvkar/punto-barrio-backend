@@ -81,7 +81,7 @@ Al abrir el repositorio con Codex por primera vez, revisa y habilita los hooks d
 - Health Check Path: `/api/health`
 - Variables: `DATABASE_URL`, `FRONTEND_URL`, `NODE_VERSION=22`
 
-Render establece `NODE_ENV=production`. El arranque aplica `prisma migrate deploy` y luego la semilla idempotente. La migración aditiva de proveedores, compras, clientes y fiados está versionada en `prisma/migrations/`.
+Render establece `NODE_ENV=production`. El arranque aplica temporalmente `prisma db push` y luego la semilla idempotente porque la base existente fue creada sin historial de Prisma Migrate. La migración aditiva permanece versionada; antes de volver a `prisma migrate deploy` se debe crear y registrar un baseline de producción.
 
 ## Estado de los requisitos de evaluación
 

@@ -43,7 +43,7 @@ Validar monto y crédito pendiente → comprobar que no exceda saldo → crear p
 
 ## Despliegue
 
-Aplicar `prisma migrate deploy` antes de iniciar el backend actualizado. El cambio es aditivo y no elimina tablas ni columnas. Mantener variables existentes `DATABASE_URL`, `FRONTEND_URL` y `VITE_API_URL`.
+Aplicar temporalmente `prisma db push` antes de iniciar el backend actualizado porque la base de Render ya existía sin historial de migraciones. El cambio es aditivo y no elimina tablas ni columnas. Mantener variables existentes `DATABASE_URL`, `FRONTEND_URL` y `VITE_API_URL`; crear un baseline antes de adoptar `prisma migrate deploy`.
 
 ## Trabajo paralelo
 
@@ -57,6 +57,6 @@ El trabajo fue realizado por una sola persona con tres subagentes por área; la 
 
 ## Riesgos
 
-- Render aún usaba `prisma db push`; debe utilizar migraciones para proteger producción.
+- La base de Render no tiene baseline y produce `P3005` con `prisma migrate deploy`; mantener `db push` hasta registrar el esquema existente como aplicado.
 - Los comprobantes dependen del reloj y conviene migrarlos a secuencia en una especificación futura.
 - Los créditos no tienen vencimiento ni auditoría de anulaciones, deliberadamente fuera de alcance.
