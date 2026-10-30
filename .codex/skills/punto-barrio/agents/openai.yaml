@@ -1,0 +1,4 @@
+interface:
+  display_name: "Punto Barrio"
+  short_description: "Implementar Punto Barrio con SDD"
+  default_prompt: "Usa $punto-barrio para implementar este cambio con trazabilidad entre frontend, backend y base de datos."

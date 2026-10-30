@@ -70,6 +70,11 @@ for (const spec of diffSpecs) {
   }
 }
 
+const untracked = git(['ls-files', '--others', '--exclude-standard']);
+if (untracked.status === 0) {
+  for (const file of untracked.stdout.split(/\r?\n/).filter(Boolean)) changed.add(file);
+}
+
 if (changed.has('prisma/schema.prisma')) {
   const migrationChanged = [...changed].some((file) => file.startsWith('prisma/migrations/'));
   if (!migrationChanged) {

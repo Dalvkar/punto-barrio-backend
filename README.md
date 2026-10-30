@@ -1,6 +1,6 @@
 # Punto Barrio Backend
 
-API REST de Punto Barrio para productos, inventario, ventas, caja, panel de indicadores y reportes. Está construida con Node.js 22, Express, TypeScript, Prisma y PostgreSQL.
+API REST de Punto Barrio para productos, inventario, ventas, caja, panel, reportes, proveedores, compras, clientes y fiados. Está construida con Node.js 22, Express, TypeScript, Prisma y PostgreSQL.
 
 ## Producción
 
@@ -42,9 +42,16 @@ npm run db:verify
 npm run ci
 ```
 
-Las 5 pruebas levantan Express en un puerto efímero y sustituyen Prisma por dobles controlados. Cubren health/consulta de base de datos, contrato 404, validación de productos, normalización de datos y prevención de stock negativo.
+Las 10 pruebas levantan Express en un puerto efímero y sustituyen Prisma por dobles controlados. Cubren salud/consulta de base, 404, productos, inventario, dashboard, proveedores, compras, límite de fiado y abonos.
 
 `npm run db:verify` valida el esquema Prisma con una URL ficticia, comprueba variables documentadas, busca conexiones incrustadas y archivos `.env` versionados, y exige una migración cuando cambia `schema.prisma`.
+
+## Incremento final
+
+- **Proveedores y compras:** `/api/suppliers` y `/api/purchases`; una compra repone stock, actualiza costo y registra el egreso dentro de una transacción.
+- **Clientes y fiados:** `/api/customers`, `/api/credits` y `/api/credits/:id/payments`; el fiado descuenta stock y registra deuda sin ingreso de caja, mientras el abono actualiza saldos y caja.
+
+La trazabilidad está en `specs/002-proveedores-y-fiados/` con `spec.md`, `plan.md`, `tasks.md` y `verification.md`. Las historias HU-07 a HU-10 viven en `docs/historias-de-usuario/` y los cuerpos de issues en `docs/github-issues.md`.
 
 ## Integración continua
 
@@ -62,7 +69,7 @@ Protege la rama `main` en GitHub y exige el check `Backend CI` para impedir merg
 
 ## Hooks y subagentes Codex
 
-`.codex/agents/` contiene los subagentes nativos `frontend`, `backend` y `database` en formato TOML. `AGENTS.md` indica a Codex cuándo coordinarlos. `.codex/hooks.json` registra hooks nativos que protegen secretos y artefactos antes de `apply_patch`, validan después de cambios relevantes y bloquean comandos destructivos, mensajes no convencionales o commits con `npm run ci` fallando.
+`.codex/agents/` contiene los subagentes nativos `frontend`, `backend` y `database` en formato TOML. `AGENTS.md` indica a Codex cuándo coordinarlos. `.codex/hooks.json` registra hooks nativos que protegen secretos y artefactos antes de `apply_patch`, validan después de cambios relevantes y bloquean comandos destructivos, mensajes no convencionales o commits con `npm run ci` fallando. `.codex/skills/punto-barrio/` agrega el skill del dominio con invariantes de stock, caja, compras y fiados.
 
 Al abrir el repositorio con Codex por primera vez, revisa y habilita los hooks del proyecto. Solicita funcionalidades por alcance; una funcionalidad completa debe coordinar los tres agentes.
 
@@ -74,7 +81,7 @@ Al abrir el repositorio con Codex por primera vez, revisa y habilita los hooks d
 - Health Check Path: `/api/health`
 - Variables: `DATABASE_URL`, `FRONTEND_URL`, `NODE_VERSION=22`
 
-Render establece `NODE_ENV=production`. El arranque actual aplica `prisma db push` y una semilla idempotente. Antes de introducir cambios de esquema en producción, crea migraciones en `prisma/migrations/` y planifica la transición a `prisma migrate deploy`.
+Render establece `NODE_ENV=production`. El arranque aplica `prisma migrate deploy` y luego la semilla idempotente. La migración aditiva de proveedores, compras, clientes y fiados está versionada en `prisma/migrations/`.
 
 ## Estado de los requisitos de evaluación
 
@@ -83,7 +90,7 @@ Render establece `NODE_ENV=production`. El arranque actual aplica `prisma db pus
 | Docente colaborador | Pendiente de verificación manual | Invitar al usuario del docente en los repositorios backend y frontend |
 | Commits de los 3 | No aplica: trabajo individual | El grupo está compuesto por un solo estudiante y el historial remoto identifica sus commits |
 | Tres partes desplegadas | Confirmado | Frontend y backend responden `200`; el health check comprueba PostgreSQL con `SELECT 1` |
-| Workflow con pruebas | Implementado | Backend CI y Frontend CI ejecutan 11 pruebas totales, validación de commits y builds |
+| Workflow con pruebas | Implementado | Backend CI y Frontend CI ejecutan 19 pruebas totales, validación de commits y builds |
 | Hook y subagente | Implementado | Hooks nativos y tres agentes de Codex dentro de `.codex/` |
 | Sin secretos | Confirmado localmente | `.env` ignorados y control automático de archivos versionados |
 | README completo | Implementado | Instalación, arquitectura, pruebas, CI, hooks, agentes y despliegue documentados |

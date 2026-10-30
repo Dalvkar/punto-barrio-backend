@@ -15,6 +15,17 @@ async function main() {
   ];
   for (const product of products) await prisma.product.upsert({ where: { sku: product.sku }, update: {}, create: product });
 
+  await prisma.supplier.upsert({
+    where: { name: 'Distribuidora Central' },
+    update: {},
+    create: { name: 'Distribuidora Central', contactName: 'Ana Vargas', phone: '70000001' },
+  });
+  await prisma.customer.upsert({
+    where: { phone: '70000002' },
+    update: {},
+    create: { name: 'Cliente del barrio', phone: '70000002', creditLimit: 300 },
+  });
+
   if (await prisma.sale.count() === 0) {
     const all = await prisma.product.findMany();
     for (let day = 5; day >= 0; day--) {

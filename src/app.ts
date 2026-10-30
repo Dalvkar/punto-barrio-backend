@@ -9,6 +9,10 @@ import salesRouter from './routes/sales';
 import cashRouter from './routes/cash';
 import dashboardRouter from './routes/dashboard';
 import reportsRouter from './routes/reports';
+import suppliersRouter from './routes/suppliers';
+import purchasesRouter from './routes/purchases';
+import customersRouter from './routes/customers';
+import creditsRouter from './routes/credits';
 import { AppError } from './lib/http';
 import { prisma } from './lib/prisma';
 
@@ -36,6 +40,10 @@ export const createApp = () => {
   app.use('/api/sales', salesRouter);
   app.use('/api/cash', cashRouter);
   app.use('/api/reports', reportsRouter);
+  app.use('/api/suppliers', suppliersRouter);
+  app.use('/api/purchases', purchasesRouter);
+  app.use('/api/customers', customersRouter);
+  app.use('/api/credits', creditsRouter);
 
   app.use((_req, res) => res.status(404).json({ message: 'Ruta no encontrada' }));
   app.use((error: unknown, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
