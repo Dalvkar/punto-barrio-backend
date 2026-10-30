@@ -1,19 +1,7 @@
 # HU 08 Registrar compras
 
-**Como** responsable de inventario
-**quiero** registrar una compra a un proveedor
-**para** reponer existencias y reflejar el egreso de caja sin ajustes manuales duplicados.
+**Historia:** Como responsable de inventario, necesitaba registrar compras para reponer existencias y reflejar el egreso automáticamente.
 
-## Criterios de aceptación
+**Resultado realizado:** se implementó la compra transaccional con proveedor, productos, cantidades y costos; actualiza stock/costo y registra el egreso de caja.
 
-- La compra exige proveedor activo y al menos un producto con cantidad y costo positivos.
-- El servidor calcula subtotales y total con los costos recibidos validados.
-- Compra, ítems, incremento de stock, actualización de costo y egreso de caja son atómicos.
-- Si proveedor o producto no existe, no queda ningún cambio parcial.
-
-## Trazabilidad
-
-- Requisito: RF-10.
-- Backend: `src/routes/purchases.ts`.
-- Datos: `Purchase`, `PurchaseItem`, `Product`, `CashMovement`.
-- Interfaz: vista Proveedores y compras.
+**Evidencia:** modelos `Purchase` y `PurchaseItem`, ruta `src/routes/purchases.ts` y prueba de transacción.

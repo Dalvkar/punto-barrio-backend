@@ -1,19 +1,7 @@
 # HU 07 Administrar proveedores
 
-**Como** responsable de compras
-**quiero** registrar y consultar proveedores
-**para** identificar el origen de la mercadería y mantener datos de contacto.
+**Historia:** Como responsable de compras, necesitaba registrar y consultar proveedores para identificar el origen de la mercadería.
 
-## Criterios de aceptación
+**Resultado realizado:** se implementó el alta y listado de proveedores activos con nombre, contacto y teléfono, validación backend y pantalla integrada.
 
-- Nombre es obligatorio y no puede repetirse sin distinguir mayúsculas.
-- Contacto y teléfono son opcionales.
-- El listado muestra proveedores activos por nombre.
-- Una entrada inválida responde `400` sin escribir datos.
-
-## Trazabilidad
-
-- Requisito: RF-10.
-- Backend: `src/routes/suppliers.ts`.
-- Datos: `Supplier`.
-- Interfaz: vista Proveedores y compras.
+**Evidencia:** modelo `Supplier`, ruta `src/routes/suppliers.ts` y vista Proveedores y compras.

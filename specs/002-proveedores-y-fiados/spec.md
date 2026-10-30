@@ -4,13 +4,13 @@
 **Estado:** Implementado
 **Fecha:** 2026-10-30
 
-## Contexto y objetivo
+## Resumen de lo implementado
 
-Los seis módulos existentes cubren dashboard, productos, inventario, ventas, caja y reportes. La ampliación agrega dos capacidades operativas que cierran ciclos cotidianos de una tienda de barrio: reponer mercadería desde proveedores y controlar ventas fiadas con cobros posteriores.
+Punto Barrio quedó funcionando con ocho módulos integrados. A los seis módulos originales se añadieron proveedores y compras, además de clientes y fiados. La implementación incluyó base de datos, API, interfaz, pruebas, CI y despliegue en Render.
 
 ## Módulos incluidos
 
-| ID | Módulo | Resultado esperado |
+| ID | Módulo | Resultado implementado |
 | --- | --- | --- |
 | M01 | Dashboard | Resumen de ventas, ingresos, catálogo y stock bajo |
 | M02 | Productos | Alta, edición, desactivación y búsqueda |
@@ -21,12 +21,12 @@ Los seis módulos existentes cubren dashboard, productos, inventario, ventas, ca
 | M07 | Proveedores y compras | Proveedores, compras, reposición y egreso automático |
 | M08 | Clientes y fiados | Clientes, límite, deuda, fiados y abonos |
 
-## Historias de usuario
+## Historias completadas
 
-- HU-07: administrar proveedores.
-- HU-08: registrar compras.
-- HU-09: administrar clientes y límites.
-- HU-10: controlar fiados y abonos.
+- HU-07: se implementó el registro y consulta de proveedores.
+- HU-08: se implementaron compras con reposición de stock y egreso automático.
+- HU-09: se implementaron clientes con límite y saldo de crédito.
+- HU-10: se implementaron fiados y abonos con actualización de deuda y caja.
 
 Las historias completas están en `docs/historias-de-usuario/`.
 
@@ -66,4 +66,4 @@ Las historias completas están en `docs/historias-de-usuario/`.
 - RF-10 y RF-11 implementados en datos, API e interfaz.
 - Pruebas y builds de ambos repositorios aprobados.
 - Matriz en `verification.md` con evidencia verificable.
-- Historias e issues preparados sin incluir secretos.
+- Historias resumidas con su implementación y evidencia.
